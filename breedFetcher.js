@@ -1,32 +1,32 @@
 const request = require('request');
-const domain = process.argv[2];
-
-//const urlName = 'https://api.thecatapi.com/v1/breeds/search?q=sib';//`http://${domain}/`
-const url = 'https://api.thecatapi.com/v1/breeds/search?q=';//`h
-let urlName = url + "" + domain;
 
 
+const fetchBreedDescription = function(breedName, callback) {
 
-request(urlName, (error, response, body) => {
-  if (error) {
-    console.log('Sorry request url not found');
-    process.exit();
-  }
-  let data = JSON.parse(body);
 
-  
-  if (!data[0]) {
-    console.log("not exist");
-    process.exit();
-  } else {
-    console.log(data[0].description);
-  }
-});
+  const url = 'https://api.thecatapi.com/v1/breeds/search?q=';
+  let urlName = url + "" + breedName;
 
+
+  request(urlName, (error, response, body) => {
+    if (error) {
+    //console.log('Sorry request url not found');
+    //process.exit();
+      callback("Sorry request url not found", null);
+    }
+    let data = JSON.parse(body);
 
   
+    if (!data[0]) {
+      callback("not exist",null);
+      process.exit();
+    } else {
+      callback(null,data[0].description);
+    }
+  });
 
-  
 
+};
 
-  
+//fetchBreedDescription('sib', 'description');
+module.exports = { fetchBreedDescription };
